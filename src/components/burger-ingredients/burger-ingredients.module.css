@@ -1,0 +1,48 @@
+.ingredients {
+    max-height: 726px;
+    overflow-y: auto;
+}
+
+.ingredients::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredients::-webkit-scrollbar-track {
+    background: #2F2F37;
+  }
+
+.ingredients::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+    height: 492px;
+}
+
+.cardList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px 24px;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 272px;
+}
+
+
+.cardImage {
+    max-width: 240px;
+    max-height: 120px;
+}
+
+.cardName {
+    text-align: center;
+}
+
+.cardPrice {
+    display: flex;
+    column-gap: 8px;
+}

@@ -1,0 +1,36 @@
+.ingredientCardList {
+    display: flex;
+    flex-direction: column;
+    max-height: 492px;
+    overflow-y: auto;
+    gap: 16px;
+    scrollbar-gutter: stable;
+}
+
+.ingredientCardList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredientCardList::-webkit-scrollbar-track {
+    background: #2F2F37;
+  }
+
+.ingredientCardList::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+    height: 292px;
+}
+
+.constructor {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

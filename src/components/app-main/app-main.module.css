@@ -1,0 +1,9 @@
+.content {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.burger {
+    display: flex;
+    gap: 40px;
+}
