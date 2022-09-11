@@ -29,8 +29,14 @@
     align-items: center;
 }
 
-.card {
+.order {
     display: flex;
-    justify-content: center;
+    align-self: self-end;
+    align-items: center;
+}
+
+.price {
+    display: flex;
+    column-gap: 9px;
     align-items: center;
 }

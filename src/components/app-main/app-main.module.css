@@ -7,3 +7,7 @@
     display: flex;
     gap: 40px;
 }
+
+.wrapper {
+    flex-basis: 600px;
+}
