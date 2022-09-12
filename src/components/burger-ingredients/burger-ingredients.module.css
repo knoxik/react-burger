@@ -1,0 +1,18 @@
+.ingredients {
+    max-height: 726px;
+    overflow-y: auto;
+}
+
+.ingredients::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredients::-webkit-scrollbar-track {
+    background: #2F2F37;
+  }
+
+.ingredients::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+    height: 492px;
+}

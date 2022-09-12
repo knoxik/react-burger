@@ -1,0 +1,42 @@
+.ingredientCardList {
+    display: flex;
+    flex-direction: column;
+    max-height: 492px;
+    overflow-y: auto;
+    gap: 16px;
+    scrollbar-gutter: stable;
+}
+
+.ingredientCardList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredientCardList::-webkit-scrollbar-track {
+    background: #2F2F37;
+  }
+
+.ingredientCardList::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+    height: 292px;
+}
+
+.constructor {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+.order {
+    display: flex;
+    align-self: self-end;
+    align-items: center;
+}
+
+.price {
+    display: flex;
+    column-gap: 9px;
+    align-items: center;
+}
