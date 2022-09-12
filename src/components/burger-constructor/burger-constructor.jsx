@@ -1,12 +1,12 @@
 import React from 'react';
-import BurgerConstructorStyles from './burger-constructor.module.css';
+import burgerConstructorStyles from './burger-constructor.module.css';
 import IngredientCard from './ingredient-card/ingredient-card';
 import { CurrencyIcon, ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import { data } from '../../utils/data';
 
-const BurgerConstructor = ({ingredientLIst}) => {
+const BurgerConstructor = ({ingredientList}) => {
     return (
-        <div className={BurgerConstructorStyles.constructor}>
+        <div className={burgerConstructorStyles.constructor}>
             <div className='pl-4'>
                 <ConstructorElement
                     type='top'
@@ -16,9 +16,10 @@ const BurgerConstructor = ({ingredientLIst}) => {
                     thumbnail={data[0].image}
                 />
             </div>
-            <div className={BurgerConstructorStyles.ingredientCardList}>
-                {ingredientLIst.map((ingredient) => (
+            <div className={burgerConstructorStyles.ingredientCardList}>
+                {ingredientList.map((ingredient) => (
                     <IngredientCard 
+                        key={ingredient._id}
                         text={ingredient.name}
                         price={ingredient.price}
                         img={ingredient.image}
@@ -36,8 +37,8 @@ const BurgerConstructor = ({ingredientLIst}) => {
                 />
             </div>
 
-            <div className={`${BurgerConstructorStyles.order} mt-10 pr-4`}>
-                <div className={`${BurgerConstructorStyles.price} mr-10`}>
+            <div className={`${burgerConstructorStyles.order} mt-10 pr-4`}>
+                <div className={`${burgerConstructorStyles.price} mr-10`}>
                     <p className='text text_type_digits-medium'>610</p>
                     <CurrencyIcon type='primary'/>
                 </div>

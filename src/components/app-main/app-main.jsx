@@ -14,7 +14,7 @@ class AppMain extends React.Component {
                         <BurgerIngredients/>
                     </div>
                     <div className={mainStyles.wrapper}>
-                        <BurgerConstructor ingredientLIst={data}/>
+                        <BurgerConstructor ingredientList={data}/>
                     </div>
                 </section>
             </main>
