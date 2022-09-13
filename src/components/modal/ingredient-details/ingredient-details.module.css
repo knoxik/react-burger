@@ -1,0 +1,20 @@
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.nutrition {
+    display: flex;
+    gap: 20px;
+}
+
+.nutritionValue {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    min-width: 112px;
+}
