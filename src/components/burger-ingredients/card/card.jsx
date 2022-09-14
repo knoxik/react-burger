@@ -53,5 +53,5 @@ Card.propTypes = {
 CardList.propTypes = {
     headline: PropTypes.string.isRequired,
     refProp: PropTypes.object.isRequired,
-    ingredientList: PropTypes.arrayOf(ingredientPropTypes).isRequired
+    ingredientList: PropTypes.arrayOf(ingredientPropTypes.isRequired).isRequired
 };

@@ -4,7 +4,7 @@ import tabsStyles from './tabs.module.css';
 import PropTypes from 'prop-types';
 
 const Tabs = ({scrollHandler, bunRef, sauseRef, mainRef}) => {
-    const [current, setCurrent] = React.useState(null)
+    const [current, setCurrent] = React.useState('one')
 
     React.useEffect(() => {
         switch (current) {

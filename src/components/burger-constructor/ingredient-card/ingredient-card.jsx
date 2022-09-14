@@ -1,6 +1,6 @@
 import IngredientCardStyles from './ingredient-card.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import propTypes from 'prop-types'
+import PropTypes from 'prop-types'
 
 
 const IngredientCard = ({text, price, img}) => {
@@ -17,9 +17,9 @@ const IngredientCard = ({text, price, img}) => {
 }
 
 IngredientCard.propTypes = {
-    text: propTypes.string.isRequired,
-    price: propTypes.number.isRequired,
-    img: propTypes.string.isRequired
+    text: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    img: PropTypes.string.isRequired
 }
 
 export default IngredientCard

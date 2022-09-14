@@ -19,19 +19,23 @@ const BurgerIngredients = ({ingredientList}) => {
     const sauceList = [];
     const mainList = [];
 
-    ingredientList.map((ingredient) => {
-        switch(ingredient.type) {
-            case 'bun':
-                bunList.push(ingredient)
-                break;
-            case 'sauce':
-                sauceList.push(ingredient)
-                break;
-            case 'main':
-                mainList.push(ingredient)
-                break;
-        }
-    })
+    React.useMemo(() => {
+        ingredientList.forEach((ingredient) => {
+            switch(ingredient.type) {
+                case 'bun':
+                    bunList.push(ingredient)
+                    break;
+                case 'sauce':
+                    sauceList.push(ingredient)
+                    break;
+                case 'main':
+                    mainList.push(ingredient)
+                    break;
+            }
+        })
+    }, [ingredientList])
+
+    
 
     return (
         <>
@@ -46,7 +50,7 @@ const BurgerIngredients = ({ingredientList}) => {
 }
 
 BurgerIngredients.propTypes = {
-    ingredientList: PropTypes.arrayOf(ingredientPropTypes).isRequired
+    ingredientList: PropTypes.arrayOf(ingredientPropTypes.isRequired).isRequired
 };
 
 export default BurgerIngredients;

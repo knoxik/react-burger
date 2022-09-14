@@ -1,4 +1,4 @@
-const ingredientsDataUrl = 'https://norma.nomoreparties.space/api/ingredients';
+const apiUrl = 'https://norma.nomoreparties.space/api';
 
 const checkResponse = (res) => {
   if (res.ok) {
@@ -7,7 +7,7 @@ const checkResponse = (res) => {
   throw `Ошибка: ${res.status}`;
 }
 
-export const getIngredientsData = async () => {
-  return await fetch(ingredientsDataUrl)
+export const getIngredientsData = () => {
+  return fetch(`${apiUrl}/ingredients`)
     .then(res => checkResponse(res))
 }

@@ -22,7 +22,7 @@ const AppMain = ({ ingredientList }) => {
 }
 
 AppMain.propTypes = {
-    ingredientList: PropTypes.arrayOf(ingredientPropTypes).isRequired
+    ingredientList: PropTypes.arrayOf(ingredientPropTypes.isRequired).isRequired
 };
 
 export default AppMain;
