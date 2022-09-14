@@ -19,7 +19,7 @@ const BurgerIngredients = ({ingredientList}) => {
     const sauceList = [];
     const mainList = [];
 
-    React.useMemo(() => {
+    const memoIngredients = React.useMemo(() => {
         ingredientList.forEach((ingredient) => {
             switch(ingredient.type) {
                 case 'bun':
@@ -33,17 +33,21 @@ const BurgerIngredients = ({ingredientList}) => {
                     break;
             }
         })
+        return {
+            bunList: bunList,
+            sauceList: sauceList,
+            mainList: mainList
+        }
     }, [ingredientList])
-
     
 
     return (
         <>
         <Tabs scrollHandler={executeScroll} bunRef={bunRef} sauseRef={sauseRef} mainRef={mainRef}/>    
         <div className={`${burgerIngredientsStyles.ingredients} mt-10 mb-4`}>
-            <CardList refProp={bunRef} headline='Булки' ingredientList={bunList}/>
-            <CardList refProp={sauseRef} headline='Соусы' ingredientList={sauceList}/>
-            <CardList refProp={mainRef} headline='Начинки' ingredientList={mainList}/>
+            <CardList refProp={bunRef} headline='Булки' ingredientList={memoIngredients.bunList}/>
+            <CardList refProp={sauseRef} headline='Соусы' ingredientList={memoIngredients.sauceList}/>
+            <CardList refProp={mainRef} headline='Начинки' ingredientList={memoIngredients.mainList}/>
         </div>
         </>
     )

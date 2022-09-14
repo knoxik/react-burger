@@ -5,4 +5,11 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.6);
+    animation-duration: 0.5s;
+    animation-name: smoothly;
+}
+
+@keyframes smoothly {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
