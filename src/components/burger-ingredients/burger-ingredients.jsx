@@ -15,11 +15,10 @@ const BurgerIngredients = ({ingredientList}) => {
     const sauseRef = React.useRef();
     const mainRef = React.useRef();
 
-    const bunList = [];
-    const sauceList = [];
-    const mainList = [];
-
     const memoIngredients = React.useMemo(() => {
+        const bunList = [];
+        const sauceList = [];
+        const mainList = [];
         ingredientList.forEach((ingredient) => {
             switch(ingredient.type) {
                 case 'bun':
