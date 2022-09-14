@@ -3,38 +3,25 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 import IngredientCard from './ingredient-card/ingredient-card';
 import OrderDetails from '../modal/order-details/order-details';
 import Modal from '../modal/modal';
-import modalStyles from '../modal/modal.module.css';
-import modalOverlayStyles from '../modal-overlay/modal-overlay.module.css'
 import { CurrencyIcon, ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import PropTypes from 'prop-types';
+import { ingredientPropTypes } from '../../utils/propTypes';
+
 
 const BurgerConstructor = ({ingredientList}) => {
     const [visible, setVisible] = React.useState(false)
     
-    const handleModalOpen = () => {
-        setVisible(true);
+    const handleModalToggle = () => {
+        setVisible(!visible);
     }
-
-    const handleModalClose = (e) => {
-        if (e.target.classList.contains(modalOverlayStyles.overlay) || e.target.classList.contains(modalStyles.closeButton)) {
-            setVisible(false);
-        }
-    }
-
-    const handleEscModalClose = (e) => {
-        if (e.key === 'Escape'){
-            setVisible(false);
-        }
-    }
-
-    const modal = (
-        <Modal onClose={handleModalClose} onEscClose={handleEscModalClose}>
-            <OrderDetails/>
-        </Modal>
-    )
 
     return (
         <>
-            {visible && modal}   
+            {visible && (
+                <Modal onClose={handleModalToggle}>
+                    <OrderDetails/>
+                </Modal>
+            )}   
             <div className={burgerConstructorStyles.constructor}>
                 <div className='pl-4'>
                     <ConstructorElement
@@ -47,12 +34,13 @@ const BurgerConstructor = ({ingredientList}) => {
                 </div>
                 <div className={burgerConstructorStyles.ingredientCardList}>
                     {ingredientList.map((ingredient) => (
+                        ingredient.type !== 'bun' && (
                         <IngredientCard 
                             key={ingredient._id}
                             text={ingredient.name}
                             price={ingredient.price}
                             img={ingredient.image}
-                        />
+                        />)
                     ))}          
                 </div>
                 
@@ -71,7 +59,7 @@ const BurgerConstructor = ({ingredientList}) => {
                         <p className='text text_type_digits-medium'>610</p>
                         <CurrencyIcon type='primary'/>
                     </div>
-                    <Button type='primary' size='large' onClick={handleModalOpen}>
+                    <Button type='primary' size='large' onClick={handleModalToggle}>
                         Оформить заказ
                     </Button>
                 </div>
@@ -79,5 +67,9 @@ const BurgerConstructor = ({ingredientList}) => {
         </>
     )
 }
+
+BurgerConstructor.propTypes = {
+    ingredientList: PropTypes.arrayOf(ingredientPropTypes).isRequired
+};
 
 export default BurgerConstructor;

@@ -1,4 +1,5 @@
 import linkItemStyles from './link-item.module.css';
+import propTypes from 'prop-types'
 
 const LinkItem = ({href, icon, children, textClass}) => {
     return (
@@ -10,5 +11,12 @@ const LinkItem = ({href, icon, children, textClass}) => {
         </li>
     )
 };
+
+LinkItem.propTypes = {
+    href: propTypes.string.isRequired,
+    icon: propTypes.element.isRequired,
+    children: propTypes.elementType.isRequired,
+    textClass: propTypes.string.isRequired
+}
 
 export default LinkItem

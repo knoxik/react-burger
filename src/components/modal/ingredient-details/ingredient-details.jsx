@@ -1,11 +1,11 @@
 import ingredientDetailsStyles from './ingredient-details.module.css';
+import { ingredientPropTypes } from '../../../utils/propTypes';
 
 const IngredientDetails = ({ingredient}) => {
-    console.log(ingredient)
     return (
         <>
             <div className={`${ingredientDetailsStyles.details}`}>
-                <img src={ingredient.image_large} />
+                <img src={ingredient.image_large} alt={ingredient.name}/>
                 <p className={`text text_type_main-medium pt-4`}>{ingredient.name}</p>
                 <div className={`${ingredientDetailsStyles.nutrition} pt-8 pb-15`}>
                     <div className={`${ingredientDetailsStyles.nutritionValue}`}>
@@ -28,6 +28,10 @@ const IngredientDetails = ({ingredient}) => {
             </div>
         </>
     )
+}
+
+IngredientDetails.propTypes = {
+    ingredient: ingredientPropTypes.isRequired
 }
 
 export default IngredientDetails;

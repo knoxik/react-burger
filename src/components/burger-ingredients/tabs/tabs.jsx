@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import tabsStyles from './tabs.module.css';
+import PropTypes from 'prop-types';
 
 const Tabs = ({scrollHandler, bunRef, sauseRef, mainRef}) => {
     const [current, setCurrent] = React.useState(null)
@@ -40,5 +41,12 @@ const Tabs = ({scrollHandler, bunRef, sauseRef, mainRef}) => {
         </div>
     )
 }
+
+Tabs.propTypes = {
+    scrollHandler: PropTypes.func.isRequired,
+    bunRef: PropTypes.object.isRequired, 
+    sauseRef: PropTypes.object.isRequired,
+    mainRef: PropTypes.object.isRequired
+};
 
 export default Tabs;
