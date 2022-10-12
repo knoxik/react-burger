@@ -1,59 +1,63 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Tabs from './tabs/tabs';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 import { CardList } from './card/card';
-import PropTypes from 'prop-types';
-import { ingredientPropTypes } from '../../utils/propTypes';
+import { getIngredientsData } from '../../utils/api'
 
 
-const executeScroll = (ref) => {
-    ref.current.scrollIntoView({block: 'start', behavior: 'smooth'});
-}
+const BurgerIngredients = () => {
+    const { ingredientsRequest, ingredientsFailed, bunList, sauceList, mainList } = useSelector(state => state.ingredients);
 
-const BurgerIngredients = ({ingredientList}) => {
+    const [current, setCurrent] = React.useState(0)
+
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        dispatch(getIngredientsData()) 
+    }, [])
+
     const bunRef = React.useRef();
     const sauseRef = React.useRef();
     const mainRef = React.useRef();
+    const ingredientsRef = React.useRef();
 
-    const memoIngredients = React.useMemo(() => {
-        const bunList = [];
-        const sauceList = [];
-        const mainList = [];
-        ingredientList.forEach((ingredient) => {
-            switch(ingredient.type) {
-                case 'bun':
-                    bunList.push(ingredient)
-                    break;
-                case 'sauce':
-                    sauceList.push(ingredient)
-                    break;
-                case 'main':
-                    mainList.push(ingredient)
-                    break;
-            }
-        })
-        return {
-            bunList: bunList,
-            sauceList: sauceList,
-            mainList: mainList
+    const clickTabScroll = (ref) => {
+        const srctollToY = ref.current.getBoundingClientRect().y - bunRef.current.getBoundingClientRect().y
+        ingredientsRef.current.scrollTo({top: srctollToY, behavior: 'smooth'})
+    }
+
+    const scrollSpy = (evt) => {
+        const target = evt.target
+        const offsetY = -130;
+        const sauseY = sauseRef.current.getBoundingClientRect().y - bunRef.current.getBoundingClientRect().y + offsetY
+        const mainY = mainRef.current.getBoundingClientRect().y - bunRef.current.getBoundingClientRect().y + offsetY
+        const currentY = target.getBoundingClientRect().y - bunRef.current.getBoundingClientRect().y
+
+        if (currentY < sauseY) {
+            setCurrent(0)
+        } else if (currentY >= sauseY && currentY < mainY) {
+            setCurrent(1)
+        } else if (currentY >= mainY) {
+            setCurrent(2)
         }
-    }, [ingredientList])
+    }
     
-
-    return (
-        <>
-        <Tabs scrollHandler={executeScroll} bunRef={bunRef} sauseRef={sauseRef} mainRef={mainRef}/>    
-        <div className={`${burgerIngredientsStyles.ingredients} mt-10 mb-4`}>
-            <CardList refProp={bunRef} headline='Булки' ingredientList={memoIngredients.bunList}/>
-            <CardList refProp={sauseRef} headline='Соусы' ingredientList={memoIngredients.sauceList}/>
-            <CardList refProp={mainRef} headline='Начинки' ingredientList={memoIngredients.mainList}/>
-        </div>
-        </>
-    )
+    if (ingredientsFailed) {
+        return <p>Произошла ошибка при получении данных</p>
+    } else if (ingredientsRequest) {
+        return <p>Загрузка...</p>
+    } else {
+        return (
+            <>
+            <Tabs scrollHandler={clickTabScroll} bunRef={bunRef} sauseRef={sauseRef} mainRef={mainRef} state={[current, setCurrent]}/>    
+            <div className={`${burgerIngredientsStyles.ingredients} mt-10 mb-4`} onScroll={scrollSpy} ref={ingredientsRef}>
+                <CardList refProp={bunRef} headline='Булки' ingredientList={bunList}/>
+                <CardList refProp={sauseRef} headline='Соусы' ingredientList={sauceList}/>
+                <CardList refProp={mainRef} headline='Начинки' ingredientList={mainList}/>
+            </div>
+            </>
+        )   
+    }
 }
-
-BurgerIngredients.propTypes = {
-    ingredientList: PropTypes.arrayOf(ingredientPropTypes.isRequired).isRequired
-};
 
 export default BurgerIngredients;
