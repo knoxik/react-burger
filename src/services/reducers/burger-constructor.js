@@ -8,7 +8,7 @@ const initialState = {
 export const constructorIngredientsReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_BUN: {
-            const newArr = state.constructorIngredients
+            const newArr = [...state.constructorIngredients]
             newArr[0] = action.bun
             return {
                 ...state,
@@ -22,8 +22,8 @@ export const constructorIngredientsReducer = (state = initialState, action) => {
             };
         }
         case ADD_INGREDIENT: {
-            const newArr = state.constructorIngredients
-            const newIngredient = JSON.parse(JSON.stringify(action.ingredient))
+            const newArr = [...state.constructorIngredients]
+            const newIngredient = {...action.ingredient}
             newIngredient.uniq_id = action.uniq_id
             newArr.push(newIngredient)
             return {
