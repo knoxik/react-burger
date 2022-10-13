@@ -8,6 +8,8 @@ import { CurrencyIcon, ConstructorElement, Button } from '@ya.praktikum/react-de
 import { UPDATE_BUN, ADD_BUN, ADD_INGREDIENT, INCREMENT_PRICE, DECREMENT_PRICE, MOVE_INGREDIENT } from '../../services/actions/burger-constructor';
 import { initialPrice, ingredientsPriceReducer } from '../../services/reducers/burger-constructor';
 import { useDrop } from "react-dnd";
+import { v4 as uuidv4 } from 'uuid';
+import { createOrder } from '../../utils/api';
 
 
 const BurgerConstructor = () => {
@@ -49,7 +51,8 @@ const BurgerConstructor = () => {
         } else {
             dispatch({
                 type: ADD_INGREDIENT,
-                ingredient: ingredient
+                ingredient: ingredient,
+                uniq_id: uuidv4()
             })
             priceDispatch({
                 type: INCREMENT_PRICE,
@@ -75,6 +78,13 @@ const BurgerConstructor = () => {
     
     const handleModalToggle = () => {
         setVisible(!visible);
+    }
+
+    const createOrderHandler = () => {
+        const ingredient_ids = constructorIngredients.map((ingredient) => ingredient._id)
+        ingredient_ids.push(ingredient_ids[0])
+        dispatch(createOrder(ingredient_ids))
+        handleModalToggle()
     }
 
     if (ingredientsFailed) {
@@ -104,7 +114,8 @@ const BurgerConstructor = () => {
                             ingredient?.type !== 'bun' && (
                             <IngredientCard 
                                 id={ingredient?._id}
-                                key={index}
+                                uniq_id={ingredient?.uniq_id}
+                                key={ingredient?.uniq_id}
                                 index={index}
                                 text={ingredient?.name}
                                 price={ingredient?.price}
@@ -130,7 +141,7 @@ const BurgerConstructor = () => {
                             <p className='text text_type_digits-medium'>{priceState.price}</p>
                             <CurrencyIcon type='primary'/>
                         </div>
-                        <Button type='primary' size='large' onClick={handleModalToggle}>
+                        <Button type='primary' size='large' onClick={createOrderHandler}>
                             Оформить заказ
                         </Button>
                     </div>

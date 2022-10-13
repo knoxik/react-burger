@@ -1,27 +1,24 @@
-import { GET_INGREDIENTS, GET_INGREDIENTS_FAILED, GET_INGREDIENTS_SUCCESS } from "../services/actions/burger-ingredients";
-import { CREATE_ORDER, CREATE_ORDER_FAILED, CREATE_ORDER_SUCCESS } from "../services/actions/order-details";
+import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_ERROR, GET_INGREDIENTS_SUCCESS } from "../services/actions/burger-ingredients";
+import { CREATE_ORDER_REQUEST, CREATE_ORDER_ERROR, CREATE_ORDER_SUCCESS } from "../services/actions/order-details";
 
-const apiUrl = 'https://norma.nomoreparties.space/api';
+const API_URL = 'https://norma.nomoreparties.space/api';
 
-const checkResponse = (res, type, dispatch) => {
+const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
-  } else {
-    dispatch({
-      type: type
-    })
   }
+  throw `Ошибка: ${res.status}`;
 }
 
 
 export function getIngredientsData () {
   return function(dispatch) {
     dispatch({
-      type: GET_INGREDIENTS
+      type: GET_INGREDIENTS_REQUEST
     })
 
-    fetch(`${apiUrl}/ingredients`)
-      .then(res => checkResponse(res, GET_INGREDIENTS_FAILED, dispatch))
+    fetch(`${API_URL}/ingredients`)
+      .then(res => checkResponse(res))
       .then(res => {
         dispatch({
           type: GET_INGREDIENTS_SUCCESS,
@@ -30,7 +27,7 @@ export function getIngredientsData () {
       })
       .catch(err => {
         dispatch({
-          type: GET_INGREDIENTS_FAILED
+          type: GET_INGREDIENTS_ERROR
         })
       })
   }
@@ -40,10 +37,10 @@ export function getIngredientsData () {
 export function createOrder (data) {
   return function(dispatch) {
     dispatch({
-      type: CREATE_ORDER
+      type: CREATE_ORDER_REQUEST
     })
 
-    fetch(`${apiUrl}/orders`, {
+    fetch(`${API_URL}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -52,19 +49,16 @@ export function createOrder (data) {
         ingredients: data
       })
     })
-    .then(res => checkResponse(res, CREATE_ORDER_FAILED, dispatch))
+    .then(res => checkResponse(res))
     .then(res => {
       dispatch({
         type: CREATE_ORDER_SUCCESS,
-        data: {
-          name: res.name,
-          order: res.order
-        }
+        data: res
       })
     })
     .catch(err => {
       dispatch({
-        type: CREATE_ORDER_FAILED
+        type: CREATE_ORDER_ERROR
       })
     })
   }

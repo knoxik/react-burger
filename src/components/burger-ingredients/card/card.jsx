@@ -6,13 +6,14 @@ import IngredientDetails from '../../modal/ingredient-details/ingredient-details
 import PropTypes from 'prop-types';
 import { ingredientPropTypes } from '../../../utils/propTypes';
 import { useDrag } from "react-dnd";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { ADD_INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS } from '../../../services/actions/ingredient-details';
 
 
-export const CardList = ({headline, refProp, ingredientList}) => {
+export const CardList = React.forwardRef(({headline, ingredientList}, ref) => {
     return (
         <div>
-            <h2 ref={refProp} className='text text_type_main-medium'>{headline}</h2>
+            <h2 ref={ref} className='text text_type_main-medium'>{headline}</h2>
             <div className={cardStyles.cardList}>
                 {ingredientList.map((ingredient) => (
                     <Card key={ingredient._id} ingredient={ingredient}/>
@@ -20,15 +21,27 @@ export const CardList = ({headline, refProp, ingredientList}) => {
             </div>
         </div>
     )
-}
+})
 
 const Card = ({ingredient}) => {
     const [visible, setVisible] = React.useState(false)
     const { constructorIngredients } = useSelector(state => state.constructorIngredients);
     const ingredientCount = getIngredientCount(ingredient._id, constructorIngredients)
-    
-    const handleModalToggle = () => {
+    const dispatch = useDispatch();
+
+    const openModal = () => {
+        dispatch({
+            type: ADD_INGREDIENT_DETAILS,
+            payload: ingredient
+        })
         setVisible(!visible);
+    }
+
+    const closeModal = () => {
+        setVisible(!visible);
+        dispatch({
+            type: DELETE_INGREDIENT_DETAILS
+        })
     }
 
     const [, dragRef] = useDrag({
@@ -39,11 +52,11 @@ const Card = ({ingredient}) => {
     return (
         <>
             {visible && (
-                <Modal title='Детали ингредиента' onClose={handleModalToggle}>
-                    <IngredientDetails ingredient={ingredient}/>
+                <Modal title='Детали ингредиента' onClose={closeModal}>
+                    <IngredientDetails/>
                 </Modal>
             )}
-            <div className={cardStyles.card + ' mt-6 mb-10'} onClick={handleModalToggle} ref={dragRef}>
+            <div className={cardStyles.card + ' mt-6 mb-10'} onClick={openModal} ref={dragRef}>
                 {ingredientCount !== 0 && (<Counter count={ingredientCount} size="default" />)}
                 <img className={`${cardStyles.cardImage} pl-4 pr-4`} src={ingredient.image_large} alt={ingredient.name}/>
                 <div className={`${cardStyles.cardPrice} pt-1 pb-1`}>
@@ -69,6 +82,5 @@ Card.propTypes = {
 
 CardList.propTypes = {
     headline: PropTypes.string.isRequired,
-    refProp: PropTypes.object.isRequired,
     ingredientList: PropTypes.arrayOf(ingredientPropTypes.isRequired).isRequired
 };

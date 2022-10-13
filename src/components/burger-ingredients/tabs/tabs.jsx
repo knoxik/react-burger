@@ -2,41 +2,40 @@ import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import tabsStyles from './tabs.module.css';
 import PropTypes from 'prop-types';
+import { refPropTypes } from '../../../utils/propTypes';
+import { INGREDIENT_TYPES } from '../../../utils/ingredient-types';
 
-const Tabs = ({scrollHandler, bunRef, sauseRef, mainRef, state}) => {
-    const [current, setCurrent] = state
-
-    const clickTabHandler = (evt) => {
-        switch (evt) {
-            case 0:
-                memoizedscrollHandler(bunRef, evt);
+const Tabs = ({scrollHandler, bunRef, sauseRef, mainRef, current}) => {
+    const clickTabHandler = (value) => {
+        switch (value) {
+            case INGREDIENT_TYPES.BUN:
+                memoizedscrollHandler(bunRef, value);
                 break;
-            case 1:
-                memoizedscrollHandler(sauseRef, evt);
+            case INGREDIENT_TYPES.SAUCE:
+                memoizedscrollHandler(sauseRef, value);
                 break;
-            case 2:
-                memoizedscrollHandler(mainRef, evt);
+            case INGREDIENT_TYPES.MAIN:
+                memoizedscrollHandler(mainRef, value);
                 break;
         }
     }
     
     const memoizedscrollHandler = React.useCallback(
-        (ref, current) => {
-            setCurrent(current);
-            scrollHandler(ref);
+        (ref, value) => {
+            scrollHandler(ref, value);
         },
         [],
       );
 
     return (
         <div className={tabsStyles.tabs}>
-            <Tab value={0} active={current === 0 } onClick={clickTabHandler}>
+            <Tab value={INGREDIENT_TYPES.BUN} active={current === INGREDIENT_TYPES.BUN} onClick={clickTabHandler}>
                 Булки
             </Tab>
-            <Tab value={1} active={current === 1} onClick={clickTabHandler}>
+            <Tab value={INGREDIENT_TYPES.SAUCE} active={current === INGREDIENT_TYPES.SAUCE} onClick={clickTabHandler}>
                 Соусы
             </Tab>
-            <Tab value={2} active={current === 2} onClick={clickTabHandler}>
+            <Tab value={INGREDIENT_TYPES.MAIN} active={current === INGREDIENT_TYPES.MAIN} onClick={clickTabHandler}>
                 Начинки
             </Tab>
         </div>
@@ -45,10 +44,10 @@ const Tabs = ({scrollHandler, bunRef, sauseRef, mainRef, state}) => {
 
 Tabs.propTypes = {
     scrollHandler: PropTypes.func.isRequired,
-    bunRef: PropTypes.object.isRequired, 
-    sauseRef: PropTypes.object.isRequired,
-    mainRef: PropTypes.object.isRequired,
-    state: PropTypes.array.isRequired,
+    bunRef: refPropTypes.isRequired,
+    sauseRef: refPropTypes.isRequired,
+    mainRef: refPropTypes.isRequired,
+    current: PropTypes.string.isRequired,
 };
 
 export default Tabs;

@@ -4,12 +4,13 @@ import Tabs from './tabs/tabs';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 import { CardList } from './card/card';
 import { getIngredientsData } from '../../utils/api'
+import { INGREDIENT_TYPES } from '../../utils/ingredient-types';
 
 
 const BurgerIngredients = () => {
     const { ingredientsRequest, ingredientsFailed, bunList, sauceList, mainList } = useSelector(state => state.ingredients);
 
-    const [current, setCurrent] = React.useState(0)
+    const [current, setCurrent] = React.useState(INGREDIENT_TYPES.BUN)
 
     const dispatch = useDispatch();
     React.useEffect(() => {
@@ -21,7 +22,9 @@ const BurgerIngredients = () => {
     const mainRef = React.useRef();
     const ingredientsRef = React.useRef();
 
-    const clickTabScroll = (ref) => {
+
+    const clickTabScroll = (ref, value) => {
+        setCurrent(value)
         const srctollToY = ref.current.getBoundingClientRect().y - bunRef.current.getBoundingClientRect().y
         ingredientsRef.current.scrollTo({top: srctollToY, behavior: 'smooth'})
     }
@@ -34,11 +37,11 @@ const BurgerIngredients = () => {
         const currentY = target.getBoundingClientRect().y - bunRef.current.getBoundingClientRect().y
 
         if (currentY < sauseY) {
-            setCurrent(0)
+            setCurrent(INGREDIENT_TYPES.BUN)
         } else if (currentY >= sauseY && currentY < mainY) {
-            setCurrent(1)
+            setCurrent(INGREDIENT_TYPES.SAUCE)
         } else if (currentY >= mainY) {
-            setCurrent(2)
+            setCurrent(INGREDIENT_TYPES.MAIN)
         }
     }
     
@@ -49,11 +52,11 @@ const BurgerIngredients = () => {
     } else {
         return (
             <>
-            <Tabs scrollHandler={clickTabScroll} bunRef={bunRef} sauseRef={sauseRef} mainRef={mainRef} state={[current, setCurrent]}/>    
+            <Tabs scrollHandler={clickTabScroll} bunRef={bunRef} sauseRef={sauseRef} mainRef={mainRef} current={current}/>    
             <div className={`${burgerIngredientsStyles.ingredients} mt-10 mb-4`} onScroll={scrollSpy} ref={ingredientsRef}>
-                <CardList refProp={bunRef} headline='Булки' ingredientList={bunList}/>
-                <CardList refProp={sauseRef} headline='Соусы' ingredientList={sauceList}/>
-                <CardList refProp={mainRef} headline='Начинки' ingredientList={mainList}/>
+                <CardList ref={bunRef} headline='Булки' ingredientList={bunList}/>
+                <CardList ref={sauseRef} headline='Соусы' ingredientList={sauceList}/>
+                <CardList ref={mainRef} headline='Начинки' ingredientList={mainList}/>
             </div>
             </>
         )   

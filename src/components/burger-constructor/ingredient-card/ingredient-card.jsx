@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { DELETE_INGREDIENT, DECREMENT_PRICE } from '../../../services/actions/burger-constructor';
 import { useDispatch } from 'react-redux';
 
-const IngredientCard = ({text, price, img, id, index, moveCard, priceDispatch}) => {
+const IngredientCard = ({text, price, img, id, index, moveCard, priceDispatch, uniq_id}) => {
     const ref = React.useRef(null)
     const dispatch = useDispatch()
     const [{ handlerId }, drop] = useDrop({
@@ -45,7 +45,7 @@ const IngredientCard = ({text, price, img, id, index, moveCard, priceDispatch}) 
     const [{ isDragging }, drag] = useDrag({
         type: 'ingredientConstructor',
         item: () => {
-          return { id, index }
+          return { id, index, uniq_id }
         },
         collect: (monitor) => ({
           isDragging: monitor.isDragging(),
@@ -57,7 +57,7 @@ const IngredientCard = ({text, price, img, id, index, moveCard, priceDispatch}) 
     const handleDelete = () => {
         dispatch({
             type: DELETE_INGREDIENT,
-            index: index
+            uniq_id: uniq_id
         })
         priceDispatch({
             type: DECREMENT_PRICE,
@@ -86,6 +86,7 @@ IngredientCard.propTypes = {
     index: PropTypes.number.isRequired,
     moveCard: PropTypes.func.isRequired,
     priceDispatch: PropTypes.func.isRequired,
+    uniq_id: PropTypes.string.isRequired,
 }
 
 export default IngredientCard

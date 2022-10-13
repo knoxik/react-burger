@@ -8,10 +8,11 @@ const initialState = {
 export const constructorIngredientsReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_BUN: {
-            state.constructorIngredients[0] = action.bun
+            const newArr = state.constructorIngredients
+            newArr[0] = action.bun
             return {
                 ...state,
-                constructorIngredients: state.constructorIngredients
+                constructorIngredients: newArr
             };
         }
         case ADD_BUN: {
@@ -21,10 +22,13 @@ export const constructorIngredientsReducer = (state = initialState, action) => {
             };
         }
         case ADD_INGREDIENT: {
-            state.constructorIngredients.push(action.ingredient)
+            const newArr = state.constructorIngredients
+            const newIngredient = JSON.parse(JSON.stringify(action.ingredient))
+            newIngredient.uniq_id = action.uniq_id
+            newArr.push(newIngredient)
             return {
                 ...state,
-                constructorIngredients: state.constructorIngredients
+                constructorIngredients: newArr
             };
         }
         case MOVE_INGREDIENT : {
@@ -41,10 +45,9 @@ export const constructorIngredientsReducer = (state = initialState, action) => {
             }
         }
         case DELETE_INGREDIENT: {
-            state.constructorIngredients.splice(action.index, 1)
             return {
                 ...state,
-                constructorIngredients: state.constructorIngredients
+                constructorIngredients: state.constructorIngredients.filter((ingredient) => ingredient.uniq_id !== action.uniq_id)
             }
         }
         default: {

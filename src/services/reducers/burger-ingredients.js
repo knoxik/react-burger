@@ -1,4 +1,4 @@
-import { GET_INGREDIENTS, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED } from "../actions/burger-ingredients";
+import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_ERROR } from "../actions/burger-ingredients";
 
 const initialState = {
     ingredientsRequest: true,
@@ -11,7 +11,7 @@ const initialState = {
 
 export const ingredientsReducer = (state = initialState, action) => {
     switch (action.type) {
-      case GET_INGREDIENTS: {
+      case GET_INGREDIENTS_REQUEST: {
         return {
             ...state,
             ingredientsRequest: true,
@@ -45,7 +45,7 @@ export const ingredientsReducer = (state = initialState, action) => {
             ingredientsRequest: false 
         };
       }
-      case GET_INGREDIENTS_FAILED: {
+      case GET_INGREDIENTS_ERROR: {
         return { 
             ...state, 
             ingredientsFailed: true, 
