@@ -1,53 +1,154 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import burgerConstructorStyles from './burger-constructor.module.css';
 import IngredientCard from './ingredient-card/ingredient-card';
+import OrderDetails from '../modal/order-details/order-details';
+import Modal from '../modal/modal';
 import { CurrencyIcon, ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import { data } from '../../utils/data';
+import { UPDATE_BUN, ADD_BUN, ADD_INGREDIENT, INCREMENT_PRICE, DECREMENT_PRICE, MOVE_INGREDIENT } from '../../services/actions/burger-constructor';
+import { initialPrice, ingredientsPriceReducer } from '../../services/reducers/burger-constructor';
+import { useDrop } from "react-dnd";
+import { v4 as uuidv4 } from 'uuid';
+import { createOrder } from '../../utils/api';
 
-const BurgerConstructor = ({ingredientList}) => {
-    return (
-        <div className={burgerConstructorStyles.constructor}>
-            <div className='pl-4'>
-                <ConstructorElement
-                    type='top'
-                    isLocked
-                    text='Краторная булка N-200i (верх)'
-                    price={200}
-                    thumbnail={data[0].image}
-                />
-            </div>
-            <div className={burgerConstructorStyles.ingredientCardList}>
-                {ingredientList.map((ingredient) => (
-                    <IngredientCard 
-                        key={ingredient._id}
-                        text={ingredient.name}
-                        price={ingredient.price}
-                        img={ingredient.image}
-                    />
-                ))}          
-            </div>
-            
-            <div className='pl-4'>
-                <ConstructorElement
-                    type='bottom'
-                    isLocked
-                    text='Краторная булка N-200i (низ)'
-                    price={200}
-                    thumbnail={data[0].image}
-                />
-            </div>
 
-            <div className={`${burgerConstructorStyles.order} mt-10 pr-4`}>
-                <div className={`${burgerConstructorStyles.price} mr-10`}>
-                    <p className='text text_type_digits-medium'>610</p>
-                    <CurrencyIcon type='primary'/>
+const BurgerConstructor = () => {
+    const {  ingredientsRequest, ingredientsFailed, bunList } = useSelector(state => state.ingredients);
+    const { constructorIngredients } = useSelector(state => state.constructorIngredients);
+
+    const [visible, setVisible] = React.useState(false)
+
+    const dispatch = useDispatch();
+    const [priceState, priceDispatch] = React.useReducer(ingredientsPriceReducer, initialPrice);
+    React.useEffect(() => {
+        if (constructorIngredients.length == 0 && bunList.length != 0) {
+            dispatch({
+                type: ADD_BUN,
+                bun: bunList[0]
+            })
+            priceDispatch({
+                type: INCREMENT_PRICE,
+                price: bunList[0].price * 2
+            })
+        }
+    }, [bunList])
+    
+
+    const handleDrop = (ingredient) => {
+        if (ingredient.type === 'bun') {
+            priceDispatch({
+                type: DECREMENT_PRICE,
+                price: constructorIngredients[0].price * 2
+            })
+            dispatch({
+                type: UPDATE_BUN,
+                bun: ingredient
+            })
+            priceDispatch({
+                type: INCREMENT_PRICE,
+                price: ingredient.price * 2
+            })
+        } else {
+            dispatch({
+                type: ADD_INGREDIENT,
+                ingredient: ingredient,
+                uniq_id: uuidv4()
+            })
+            priceDispatch({
+                type: INCREMENT_PRICE,
+                price: ingredient.price
+            })
+        }
+    }
+
+    const moveCard = React.useCallback((dragIndex, hoverIndex) => {
+        dispatch({
+            type: MOVE_INGREDIENT,
+            dragIndex: dragIndex,
+            hoverIndex: hoverIndex
+        })
+      }, [])
+
+    const [, dropTarget] = useDrop({
+        accept: 'ingredient',
+        drop(ingredient) {
+            handleDrop(ingredient);
+        },
+    });
+    
+    const handleModalToggle = () => {
+        setVisible(!visible);
+    }
+
+    const createOrderHandler = () => {
+        const ingredient_ids = constructorIngredients.map((ingredient) => ingredient._id)
+        ingredient_ids.push(ingredient_ids[0])
+        dispatch(createOrder(ingredient_ids))
+        handleModalToggle()
+    }
+
+    if (ingredientsFailed) {
+        return <p>Произошла ошибка при получении данных</p>
+    } else if (ingredientsRequest) {
+        return <p>Загрузка...</p>
+    } else {
+        return (
+            <>
+                {visible && (
+                    <Modal onClose={handleModalToggle}>
+                        <OrderDetails/>
+                    </Modal>
+                )}   
+                <div className={burgerConstructorStyles.constructor} ref={dropTarget}>
+                    <div className='pl-4'>
+                        <ConstructorElement
+                            type='top'
+                            isLocked
+                            text={`${constructorIngredients[0]?.name} (верх)`}
+                            price={constructorIngredients[0]?.price}
+                            thumbnail={constructorIngredients[0]?.image}
+                        />
+                    </div>
+                    <div className={burgerConstructorStyles.ingredientCardList}>
+                        {constructorIngredients.map((ingredient, index) => (
+                            ingredient?.type !== 'bun' && (
+                            <IngredientCard 
+                                id={ingredient?._id}
+                                uniq_id={ingredient?.uniq_id}
+                                key={ingredient?.uniq_id}
+                                index={index}
+                                text={ingredient?.name}
+                                price={ingredient?.price}
+                                img={ingredient?.image}
+                                moveCard={moveCard}
+                                priceDispatch={priceDispatch}
+                            />)
+                        ))}          
+                    </div>
+                    
+                    <div className='pl-4'>
+                        <ConstructorElement
+                            type='bottom'
+                            isLocked
+                            text={`${constructorIngredients[0]?.name} (низ)`}
+                            price={constructorIngredients[0]?.price}
+                            thumbnail={constructorIngredients[0]?.image}
+                        />
+                    </div>
+    
+                    <div className={`${burgerConstructorStyles.order} mt-10 pr-4`}>
+                        <div className={`${burgerConstructorStyles.price} mr-10`}>
+                            <p className='text text_type_digits-medium'>{priceState.price}</p>
+                            <CurrencyIcon type='primary'/>
+                        </div>
+                        <Button type='primary' size='large' onClick={createOrderHandler}>
+                            Оформить заказ
+                        </Button>
+                    </div>
                 </div>
-                <Button type='primary' size='large'>
-                    Оформить заказ
-                </Button>
-            </div>
-        </div>
-    )
+            </>
+        )
+    }
 }
 
 export default BurgerConstructor;
