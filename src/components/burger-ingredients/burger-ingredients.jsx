@@ -1,21 +1,14 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Tabs from './tabs/tabs';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 import { CardList } from './card/card';
-import { getIngredientsData } from '../../utils/api'
 import { INGREDIENT_TYPES } from '../../utils/ingredient-types';
 
 
 const BurgerIngredients = () => {
     const { ingredientsRequest, ingredientsFailed, bunList, sauceList, mainList } = useSelector(state => state.ingredients);
-
     const [current, setCurrent] = React.useState(INGREDIENT_TYPES.BUN)
-
-    const dispatch = useDispatch();
-    React.useEffect(() => {
-        dispatch(getIngredientsData()) 
-    }, [])
 
     const bunRef = React.useRef();
     const sauseRef = React.useRef();

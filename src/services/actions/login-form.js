@@ -1,0 +1,10 @@
+export const USER_LOGIN_FORM_SET_VALUE = 'USER_LOGIN_FORM_SET_VALUE';
+export const USER_LOGIN_FORM_SUBMIT = 'USER_LOGIN_FORM_SUBMIT';
+export const USER_LOGIN_FORM_SUBMIT_SUCCESS = 'USER_LOGIN_FORM_SUBMIT_SUCCESS';
+export const USER_LOGIN_FORM_SUBMIT_FAILED = 'USER_LOGIN_FORM_SUBMIT_FAILED';
+
+export const setUserFormValue = (field, value) => ({
+    type: USER_LOGIN_FORM_SET_VALUE,
+    field,
+    value
+});

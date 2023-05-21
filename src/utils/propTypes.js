@@ -18,3 +18,9 @@ export const ingredientPropTypes = PropTypes.shape({
 export const refPropTypes = PropTypes.shape({
     current: PropTypes.object
 });
+
+export const registrationTextsPropTypes = PropTypes.shape({
+  text: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  link_text: PropTypes.string.isRequired,
+});
