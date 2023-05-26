@@ -5,38 +5,26 @@ import IngredientCard from './ingredient-card/ingredient-card';
 import OrderDetails from '../modal/order-details/order-details';
 import Modal from '../modal/modal';
 import { CurrencyIcon, ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import { UPDATE_BUN, ADD_BUN, ADD_INGREDIENT, INCREMENT_PRICE, DECREMENT_PRICE, MOVE_INGREDIENT } from '../../services/actions/burger-constructor';
-import { initialPrice, ingredientsPriceReducer } from '../../services/reducers/burger-constructor';
+import { UPDATE_BUN, ADD_INGREDIENT, INCREMENT_PRICE, DECREMENT_PRICE, MOVE_INGREDIENT } from '../../services/actions/burger-constructor';
 import { useDrop } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import { createOrder } from '../../utils/api';
+import { getCookie } from '../../utils/cookie';
+import { LOGIN_ROUTE } from '../../utils/routes';
+import { useNavigate } from 'react-router-dom';
 
 
 const BurgerConstructor = () => {
-    const {  ingredientsRequest, ingredientsFailed, bunList } = useSelector(state => state.ingredients);
+    const {  ingredientsRequest, ingredientsFailed } = useSelector(state => state.ingredients);
+    const { price } = useSelector(state => state.ingredientsPrice);
     const { constructorIngredients } = useSelector(state => state.constructorIngredients);
-
     const [visible, setVisible] = React.useState(false)
-
     const dispatch = useDispatch();
-    const [priceState, priceDispatch] = React.useReducer(ingredientsPriceReducer, initialPrice);
-    React.useEffect(() => {
-        if (constructorIngredients.length == 0 && bunList.length != 0) {
-            dispatch({
-                type: ADD_BUN,
-                bun: bunList[0]
-            })
-            priceDispatch({
-                type: INCREMENT_PRICE,
-                price: bunList[0].price * 2
-            })
-        }
-    }, [bunList])
-    
+    const navigate = useNavigate();
 
     const handleDrop = (ingredient) => {
         if (ingredient.type === 'bun') {
-            priceDispatch({
+            dispatch({
                 type: DECREMENT_PRICE,
                 price: constructorIngredients[0].price * 2
             })
@@ -44,7 +32,7 @@ const BurgerConstructor = () => {
                 type: UPDATE_BUN,
                 bun: ingredient
             })
-            priceDispatch({
+            dispatch({
                 type: INCREMENT_PRICE,
                 price: ingredient.price * 2
             })
@@ -54,7 +42,7 @@ const BurgerConstructor = () => {
                 ingredient: ingredient,
                 uniq_id: uuidv4()
             })
-            priceDispatch({
+            dispatch({
                 type: INCREMENT_PRICE,
                 price: ingredient.price
             })
@@ -81,10 +69,15 @@ const BurgerConstructor = () => {
     }
 
     const createOrderHandler = () => {
-        const ingredient_ids = constructorIngredients.map((ingredient) => ingredient._id)
-        ingredient_ids.push(ingredient_ids[0])
-        dispatch(createOrder(ingredient_ids))
-        handleModalToggle()
+        if (getCookie('refreshToken')) {
+            const ingredient_ids = constructorIngredients.map((ingredient) => ingredient._id)
+            ingredient_ids.push(ingredient_ids[0])
+            dispatch(createOrder(ingredient_ids))
+            handleModalToggle()
+        } else {
+            navigate(`/${LOGIN_ROUTE}`)
+        }
+        
     }
 
     if (ingredientsFailed) {
@@ -121,7 +114,6 @@ const BurgerConstructor = () => {
                                 price={ingredient?.price}
                                 img={ingredient?.image}
                                 moveCard={moveCard}
-                                priceDispatch={priceDispatch}
                             />)
                         ))}          
                     </div>
@@ -138,10 +130,10 @@ const BurgerConstructor = () => {
     
                     <div className={`${burgerConstructorStyles.order} mt-10 pr-4`}>
                         <div className={`${burgerConstructorStyles.price} mr-10`}>
-                            <p className='text text_type_digits-medium'>{priceState.price}</p>
+                            <p className='text text_type_digits-medium'>{price}</p>
                             <CurrencyIcon type='primary'/>
                         </div>
-                        <Button type='primary' size='large' onClick={createOrderHandler}>
+                        <Button htmlType='button' type='primary' size='large' onClick={createOrderHandler}>
                             Оформить заказ
                         </Button>
                     </div>

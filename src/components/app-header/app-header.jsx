@@ -1,7 +1,7 @@
 import headerStyles from './app-header.module.css';
 import LinkItem from './link-item/link-item'
-import { Logo, BurgerIcon, ProfileIcon, ListIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-
+import { Logo } from '@ya.praktikum/react-developer-burger-ui-components'
+import { PROFILE_ROUTE, FEED_ROUTE } from '../../utils/routes';
 
 const AppHeader = () =>  {
     return (
@@ -12,20 +12,20 @@ const AppHeader = () =>  {
             <nav className={headerStyles.wrapper}>
                 <ul className={headerStyles.menu}>
                     <LinkItem textClass='text text_type_main-default'
-                            icon={<BurgerIcon />}
-                            href='#'>
+                            iconName='BurgerIcon'
+                            href='/'>
                                     Конструктор
                     </LinkItem>
-                    <LinkItem textClass='text text_type_main-default text_color_inactive'
-                            icon={<ListIcon type='secondary' />}
-                            href='#'>
+                    <LinkItem textClass='text text_type_main-default'
+                            iconName='ListIcon'
+                            href={`/${FEED_ROUTE}`}>
                                     Лента заказов
                     </LinkItem>
                 </ul>
                 <ul className={headerStyles.menu}>
-                    <LinkItem textClass='text text_type_main-default text_color_inactive'
-                            icon={<ProfileIcon type='secondary' />}
-                            href='#'>
+                    <LinkItem textClass='text text_type_main-default'
+                            iconName='ProfileIcon'
+                            href={`/${PROFILE_ROUTE}`}>
                                     Личный кабинет
                     </LinkItem>
                 </ul>

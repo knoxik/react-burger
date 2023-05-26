@@ -1,14 +1,13 @@
 import React from 'react';
-import Modal from '../../modal/modal';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import cardStyles from './card.module.css';
-import IngredientDetails from '../../modal/ingredient-details/ingredient-details';
 import PropTypes from 'prop-types';
 import { ingredientPropTypes } from '../../../utils/propTypes';
 import { useDrag } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS } from '../../../services/actions/ingredient-details';
-
+import { Link, useLocation } from 'react-router-dom';
+import { INGREDIENTS_ROUTE } from '../../../utils/routes';
 
 export const CardList = React.forwardRef(({headline, ingredientList}, ref) => {
     return (
@@ -28,6 +27,7 @@ const Card = ({ingredient}) => {
     const { constructorIngredients } = useSelector(state => state.constructorIngredients);
     const ingredientCount = getIngredientCount(ingredient._id, constructorIngredients)
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const openModal = () => {
         dispatch({
@@ -37,13 +37,6 @@ const Card = ({ingredient}) => {
         setVisible(!visible);
     }
 
-    const closeModal = () => {
-        setVisible(!visible);
-        dispatch({
-            type: DELETE_INGREDIENT_DETAILS
-        })
-    }
-
     const [, dragRef] = useDrag({
         type: 'ingredient',
         item: ingredient
@@ -51,20 +44,17 @@ const Card = ({ingredient}) => {
 
     return (
         <>
-            {visible && (
-                <Modal title='Детали ингредиента' onClose={closeModal}>
-                    <IngredientDetails/>
-                </Modal>
-            )}
-            <div className={cardStyles.card + ' mt-6 mb-10'} onClick={openModal} ref={dragRef}>
-                {ingredientCount !== 0 && (<Counter count={ingredientCount} size="default" />)}
-                <img className={`${cardStyles.cardImage} pl-4 pr-4`} src={ingredient.image_large} alt={ingredient.name}/>
-                <div className={`${cardStyles.cardPrice} pt-1 pb-1`}>
-                    <p className='text text_type_digits-default'>{ingredient.price}</p>
-                    <CurrencyIcon type='primary' />
+            <Link to={`/${INGREDIENTS_ROUTE}/${ingredient._id}`} state={{background: location}} onClick={openModal} className={cardStyles.link}>
+                <div className={cardStyles.card + ' mt-6 mb-10'} ref={dragRef}>
+                    {ingredientCount !== 0 && (<Counter count={ingredientCount} size="default" />)}
+                    <img className={`${cardStyles.cardImage} pl-4 pr-4`} src={ingredient.image_large} alt={ingredient.name}/>
+                    <div className={`${cardStyles.cardPrice} pt-1 pb-1`}>
+                        <p className='text text_type_digits-default'>{ingredient.price}</p>
+                        <CurrencyIcon type='primary' />
+                    </div>
+                    <p className={`${cardStyles.cardName} text text_type_main-default`}>{ingredient.name}</p>
                 </div>
-                <p className={`${cardStyles.cardName} text text_type_main-default`}>{ingredient.name}</p>
-            </div>
+            </Link>
         </>
     )
 }

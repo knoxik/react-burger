@@ -1,0 +1,30 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 480px;
+    margin: 180px auto 0;
+}
+
+.input {
+    width: 480px;
+    margin-top: 24px;
+}
+
+.link {
+    text-decoration: none;
+    color: #4C4CFF;
+    transition: opacity .2s;
+}
+
+.link:hover {
+    opacity: .7;
+}
+
+.form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
