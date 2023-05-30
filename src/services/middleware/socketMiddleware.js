@@ -1,3 +1,5 @@
+import { refreshToken } from "../../utils/api";
+
 export const socketMiddleware = (wsActions) => {
     return store => {
       let socket = null;
@@ -23,11 +25,17 @@ export const socketMiddleware = (wsActions) => {
           };
   
           socket.onmessage = event => {
+            const isAuth = event.currentTarget.url.includes('token')
             const { data } = event;
             const parsedData = JSON.parse(data);
             const { success, ...restParsedData } = parsedData;
-  
-            dispatch({ type: onMessage, payload: restParsedData });
+
+            if (restParsedData.message === 'Invalid or missing token' || 
+                restParsedData.message === 'jwt expired') {
+                  refreshToken();
+            } else {
+              dispatch({ type: onMessage, payload: {...restParsedData, isAuth} });
+            }
           };
   
           socket.onclose = event => {

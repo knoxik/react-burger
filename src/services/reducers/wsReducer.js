@@ -9,6 +9,7 @@ import {
     wsConnected: false,
     wsGetData: false,
     orders: [],
+    authOrders: [],
     doneOrders: [],
     pendingOrders: [],
     total: undefined,
@@ -44,6 +45,8 @@ import {
       case WS_GET_MESSAGE:
         const doneOrders = []
         const pendingOrders = []
+        let orders = []
+        let authOrders = []
         action.payload.orders.forEach((order) => {
             if (order.status === 'done') {
                 doneOrders.push(order)
@@ -52,10 +55,17 @@ import {
             }
         })
 
+        if (action.payload.isAuth) {
+          authOrders = action.payload.orders
+        } else {
+          orders = action.payload.orders
+        }
+
         return {
           ...state,
           wsGetData: true,
-          orders: action.payload.orders,
+          orders: orders,
+          authOrders: authOrders,
           doneOrders: doneOrders,
           pendingOrders: pendingOrders,
           total: action.payload.total,

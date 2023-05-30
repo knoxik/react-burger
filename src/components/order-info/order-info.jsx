@@ -1,17 +1,25 @@
 import orderInfoStyles from './order-info.module.css'
 import IngredientIcon from '../ingredient-icon/ingredient-icon'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useMemo, useState } from 'react'
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components'
 import cn from 'classnames'
+import { PROFILE_ROUTE } from '../../utils/routes'
 
 
 const OrderInfo = ({ isModal }) => {
     const { id } = useParams();  
-    const { orders } = useSelector((store) => store.ws);
+    const { orders, authOrders } = useSelector((store) => store.ws);
     const { ingredientsById } = useSelector((store) => store.ingredients)
-    const order = orders.find((order) => order._id === id);
+    const location = useLocation();
+    let order = []
+    if (location.pathname.includes(PROFILE_ROUTE)) {
+        order = authOrders.find((order) => order._id === id);
+    } else {
+        order = orders.find((order) => order._id === id);
+    }
+    
     const formattedDate = <FormattedDate date={new Date(order.createdAt)} />
     const [price, setPrice] = useState(0)
 
