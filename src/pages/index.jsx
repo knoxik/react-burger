@@ -6,6 +6,8 @@ import { ResetPasswordPage } from './reset-password/reset-password';
 import { ProfilePage } from './profile/profile';
 import { OrdersHistoryPage } from './orders-history/orders-history';
 import { IngredientDetailsPage } from './ingredient-details/ingredient-detais';
+import { FeedPage } from './feed/feed';
+import { OrderInfoPage } from './order-info/order-info';
 
 export { 
     HomePage,
@@ -15,5 +17,7 @@ export {
     ResetPasswordPage, 
     ProfilePage,
     OrdersHistoryPage,
-    IngredientDetailsPage
+    IngredientDetailsPage,
+    FeedPage,
+    OrderInfoPage
 };

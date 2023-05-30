@@ -7,6 +7,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFormValue } from '../../services/actions/profile-info';
 import { updateUserData, deleteUserData } from '../../utils/api';
+import { clx } from '../../utils/utils';
 
 export function ProfilePage() {
     const dispatch = useDispatch();
@@ -71,6 +72,9 @@ export function ProfilePage() {
         dispatch(updateUserData(form))
     }
 
+    const activeLinkStyle = `${profileStyles.link_active} text text_type_main-medium`;
+    const linkStyle = `${profileStyles.link} text text_type_main-medium text_color_inactive`;
+
     return (
         <>
             <AppHeader/>
@@ -79,24 +83,26 @@ export function ProfilePage() {
                     <ul className={profileStyles.links}>
                         <li className={profileStyles.linkItem}>
                             <NavLink to={`/${PROFILE_ROUTE}`}
-                                className={({isActive}) => (isActive ? 
-                                    `${profileStyles.link_active} text text_type_main-medium` : 
-                                    `${profileStyles.link} text text_type_main-medium text_color_inactive`)} end> 
+                                className={clx({
+                                    [activeLinkStyle]: location.pathname === `/${PROFILE_ROUTE}`,
+                                    [linkStyle] : true,
+                                })}> 
                                         Профиль
                             </NavLink>
                         </li>
                         <li className={profileStyles.linkItem}>
                             <NavLink to={`/${PROFILE_ROUTE}/${ORDERS_ROUTE}`} 
-                                className={({isActive}) => (isActive ? 
-                                    `${profileStyles.link_active} text text_type_main-medium` : 
-                                    `${profileStyles.link} text text_type_main-medium text_color_inactive`)} end>  
+                                className={clx({
+                                    [activeLinkStyle]: location.pathname === `/${PROFILE_ROUTE}/${ORDERS_ROUTE}`,
+                                    [linkStyle] : true,
+                                })}> 
                                         История заказов
                             </NavLink>
                         </li>
                         <li className={profileStyles.linkItem}>
                             <NavLink to={`/`} 
                                 onClick={logOut}
-                                className={`${profileStyles.link} text text_type_main-medium text_color_inactive`}> 
+                                className={linkStyle}> 
                                     Выход
                             </NavLink>
                         </li> 

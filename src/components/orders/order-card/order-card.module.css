@@ -1,0 +1,47 @@
+.orderCard {
+    display: flex;
+    flex-direction: column;
+    background: #1C1C21;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 40px;
+}
+
+.subtitle {
+    display: flex;
+    justify-content: space-between;
+}
+
+.result {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ingredients {
+    display: flex;
+}
+
+.imageWrapper {
+    margin-left: -16px;
+}
+
+.imageWrapper:last-of-type {
+    position: relative;
+}
+
+.imageWrapper:first-of-type {
+    margin-left: 0;
+}
+
+.imageOpacity {
+    opacity: .6;
+}
+
+.price {
+    display: flex;
+    column-gap: 9px;
+    align-items: center;
+}
+
+.status {
+    color: #00CCCC;
+}

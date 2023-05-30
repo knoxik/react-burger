@@ -1,0 +1,26 @@
+.content {
+    /* display: flex;
+    flex-direction: column-reverse; */
+    max-height: 852px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: #2F2F37;
+    margin-bottom: 64px;
+  }
+
+.content::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+}
