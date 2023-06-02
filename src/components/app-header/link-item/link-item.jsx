@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom';
 import { BurgerIcon, ProfileIcon, ListIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-
 const LinkItem = ({href, children, textClass, iconName}) => {
     const getIcon = (iconName, isActive) => {
         const type = isActive ? 'primary' : 'secondary';

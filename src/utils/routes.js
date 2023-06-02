@@ -6,7 +6,7 @@ const PROFILE_ROUTE = 'profile'
 const ORDERS_ROUTE = 'orders'
 const FEED_ROUTE = 'feed'
 const INGREDIENTS_ROUTE = 'ingredients'
-const INGREDIENT_DETAIS_ROUTE = 'ingredients/:id'
+const INGREDIENT_DETAILS_ROUTE = 'ingredients/:id'
 
 export {
     LOGIN_ROUTE,
@@ -17,5 +17,5 @@ export {
     FEED_ROUTE,
     ORDERS_ROUTE,
     INGREDIENTS_ROUTE,
-    INGREDIENT_DETAIS_ROUTE
+    INGREDIENT_DETAILS_ROUTE
 }

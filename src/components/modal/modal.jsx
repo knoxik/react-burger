@@ -4,11 +4,12 @@ import modalStyles from './modal.module.css';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 
 const modalRoot = document.getElementById('react-modals');
 
-const Modal = ({children, onClose, title}) => {
+const Modal = ({children, onClose, title, titleClass}) => {
     React.useEffect(() => {
         document.addEventListener('keydown', handleEscModalClose);
 
@@ -26,7 +27,7 @@ const Modal = ({children, onClose, title}) => {
             <div className={modalStyles.modal}>
                 <ModalOverlay onClose={onClose}/>
                 <div className={modalStyles.modalContainer}>
-                    {title && <h2 className={`text text_type_main-large ml-10 mt-10 pt-3`}>{title}</h2>}
+                    {title && <h2 className={cn('text text_type_main-large ml-10 mt-10 pt-3', titleClass)}>{title}</h2>}
                     <button className={modalStyles.closeButton} type="button" onClick={onClose}>
                         <CloseIcon type="primary" />
                     </button>

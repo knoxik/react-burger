@@ -1,0 +1,55 @@
+.content {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.number {
+    text-align: center;
+}
+
+.status {
+    color: #00CCCC;
+}
+
+.list {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+    background: #2F2F37;
+    margin-bottom: 20px;
+  }
+
+.list::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+}
+
+.ingredient {
+    display: flex;
+    column-gap: 16px;
+    align-items: center;
+    padding-right: 24px;
+    padding-bottom: 16px;
+}
+
+.ingredient:last-of-type {
+    padding-bottom: 0;
+}
+
+.result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.price {
+    display: flex;
+    column-gap: 9px;
+    margin-left: auto;
+}

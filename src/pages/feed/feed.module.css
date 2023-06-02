@@ -1,0 +1,36 @@
+.content {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.feed {
+    display: flex;
+    gap: 60px;
+}
+
+.wrapper {
+    flex-basis: 600px;
+}
+
+.orderList {
+    flex-basis: 600px;
+    overflow-y: auto;
+    max-height: 852px;
+    scrollbar-gutter: stable;
+    padding-right: 8px;
+}
+
+.orderList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.orderList::-webkit-scrollbar-track {
+    background: #2F2F37;
+    margin-bottom: 60px;
+  }
+
+.orderList::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+    
+}

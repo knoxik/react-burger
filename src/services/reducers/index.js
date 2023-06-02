@@ -9,6 +9,7 @@ import { userLoginFormReducer } from './login-form';
 import { forgotPasswordFormReducer } from './forgot-password';
 import { resetPasswordFormReducer } from './reset-password';
 import { updateUserFormReducer } from './profile-info';
+import { wsReducer } from './wsReducer';
 
 export const rootReducer = combineReducers({
     ingredients: ingredientsReducer,
@@ -22,4 +23,5 @@ export const rootReducer = combineReducers({
     resetPasswordForm: resetPasswordFormReducer,
     updateUserForm: updateUserFormReducer,
     user: userDetaReducer,
+    ws: wsReducer,
 });

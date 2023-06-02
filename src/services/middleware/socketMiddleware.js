@@ -1,0 +1,49 @@
+import { refreshToken } from "../../utils/api";
+
+export const socketMiddleware = (wsActions) => {
+    return store => {
+      let socket = null;
+  
+      return next => action => {
+        const { dispatch } = store;
+        const { type, payload } = action;
+        const { wsInit, onOpen, onClose, onError, onMessage } = wsActions;
+
+        if (type === wsInit) {
+          socket = new WebSocket(payload);
+        }
+        if (socket && type === onClose) {
+          socket.close()
+        }
+        if (socket) {
+          socket.onopen = event => {
+            dispatch({ type: onOpen, payload: event });
+          };
+  
+          socket.onerror = event => {
+            dispatch({ type: onError, payload: event });
+          };
+  
+          socket.onmessage = event => {
+            const isAuth = event.currentTarget.url.includes('token')
+            const { data } = event;
+            const parsedData = JSON.parse(data);
+            const { success, ...restParsedData } = parsedData;
+
+            if (restParsedData.message === 'Invalid or missing token' || 
+                restParsedData.message === 'jwt expired') {
+                  refreshToken();
+            } else {
+              dispatch({ type: onMessage, payload: {...restParsedData, isAuth} });
+            }
+          };
+  
+          socket.onclose = event => {
+            dispatch({ type: onClose, payload: event });
+          };
+        }
+  
+        next(action);
+      };
+    };
+  };

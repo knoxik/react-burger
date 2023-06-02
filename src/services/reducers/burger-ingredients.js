@@ -4,6 +4,7 @@ const initialState = {
     ingredientsRequest: true,
     ingredientsFailed: false,
     ingredients: [],
+    ingredientsById: {},
     bunList: [],
     sauceList: [],
     mainList: []
@@ -22,7 +23,9 @@ export const ingredientsReducer = (state = initialState, action) => {
         const bunList = [];
         const sauceList = [];
         const mainList = [];
+        const ingredientsById = {};
         action.ingredients.forEach((ingredient) => {
+          ingredientsById[ingredient._id] = ingredient;
           switch(ingredient.type) {
               case 'bun':
                   bunList.push(ingredient)
@@ -42,6 +45,7 @@ export const ingredientsReducer = (state = initialState, action) => {
             bunList: bunList,
             sauceList: sauceList,
             mainList: mainList,
+            ingredientsById: ingredientsById,
             ingredientsRequest: false 
         };
       }

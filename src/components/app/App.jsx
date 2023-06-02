@@ -17,7 +17,9 @@ import {
   ResetPasswordPage,
   ProfilePage,
   OrdersHistoryPage,
-  IngredientDetailsPage
+  IngredientDetailsPage,
+  FeedPage,
+  OrderInfoPage
 } from '../../pages';
 import { 
   LOGIN_ROUTE, 
@@ -26,9 +28,11 @@ import {
   RESET_PASSWORD_ROUTE,
   PROFILE_ROUTE,
   ORDERS_ROUTE,
-  INGREDIENT_DETAIS_ROUTE
+  INGREDIENT_DETAILS_ROUTE,
+  FEED_ROUTE
 } from '../../utils/routes';
 import { ADD_BUN, INCREMENT_PRICE } from '../../services/actions/burger-constructor';
+import OrderInfo from '../order-info/order-info';
 
 const App = () => {
     const { userRequest } = useSelector((store) => store.user);
@@ -37,7 +41,7 @@ const App = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const background = location.state?.background
+    const background = location.state?.background;
 
     useEffect(() => {   
         dispatch(getIngredientsData())  
@@ -68,10 +72,9 @@ const App = () => {
         return <p>Загрузка...</p>
     }
 
-
     return (
       <>
-      <Routes location={background}>
+      <Routes location={background || location}>
         <Route path="/" element={<HomePage />} />
         <Route path={LOGIN_ROUTE} element={<NotAuthRoute element={<LoginPage/>}/>} />
         <Route path={REGISTER_ROUTE} element={<NotAuthRoute element={<RegisterPage/>}/>} />
@@ -80,15 +83,31 @@ const App = () => {
         <Route path={PROFILE_ROUTE} element={<ProtectedRoute element={<ProfilePage />}/>} >
           <Route path={ORDERS_ROUTE} element={<ProtectedRoute element={<OrdersHistoryPage/>}/>}/>
         </Route>
-        <Route path={INGREDIENT_DETAIS_ROUTE} element={<IngredientDetailsPage />} />
+        <Route path={INGREDIENT_DETAILS_ROUTE} element={<IngredientDetailsPage />} />
+        <Route path={FEED_ROUTE} element={<FeedPage />} />
+        <Route path={`${FEED_ROUTE}/:id`} element={<OrderInfoPage />} />
+        <Route path={`${PROFILE_ROUTE}/${ORDERS_ROUTE}/:id`} element={<ProtectedRoute element={<OrderInfoPage/>}/>}/>
+        
       </Routes>
 
       {background && (
         <Routes>
-          <Route path={INGREDIENT_DETAIS_ROUTE}
+          <Route path={INGREDIENT_DETAILS_ROUTE}
                  element={
                   <Modal title='Детали ингредиента' onClose={closeModal}>
                       <IngredientDetails/>
+                  </Modal>
+                }/>
+          <Route path={`${FEED_ROUTE}/:id`}
+                 element={
+                  <Modal title={`#${location.state.number}`} titleClass='text text_type_digits-default' onClose={closeModal}>
+                      <OrderInfo isModal={true}/>
+                  </Modal>
+                }/>
+          <Route path={`${PROFILE_ROUTE}/${ORDERS_ROUTE}/:id`}
+                 element={
+                  <Modal title={`#${location.state.number}`} titleClass='text text_type_digits-default' onClose={closeModal}>
+                      <OrderInfo isModal={true}/>
                   </Modal>
                 }/>
         </Routes>
